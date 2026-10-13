@@ -20,7 +20,7 @@ nav .cta{color:var(--acc);font-weight:600}
 .hero h1{font-size:clamp(2.6rem,7vw,5rem)}.hero p.tag{font-size:1.35rem;color:var(--mut);margin:0 0 1.6rem}
 .btn{display:inline-block;background:var(--acc);color:#111;font-weight:600;font-size:1.2rem;padding:1rem 2rem;border-radius:4px;text-decoration:none}.btn:hover{background:#e0bd82}
 .hint{font-size:1rem;color:var(--mut);margin-top:1rem;max-width:34rem}
-section{padding:4.5rem 1.5rem}.wrap{max-width:1150px;margin:0 auto}
+section,#organizers{scroll-margin-top:var(--hh,70px);padding:4.5rem 1.5rem}.wrap{max-width:1150px;margin:0 auto}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
 .g img{width:100%;aspect-ratio:3/2;object-fit:cover;display:block;transition:opacity .2s}.g:hover img{opacity:.85}
 .about{display:grid;grid-template-columns:1fr 1.4fr;gap:3rem;align-items:center}.about img{width:100%;border-radius:4px}
@@ -28,18 +28,18 @@ section{padding:4.5rem 1.5rem}.wrap{max-width:1150px;margin:0 auto}
 .alt{background:#1a1a1a}.cols{display:grid;grid-template-columns:1fr 1fr;gap:2rem}.small{font-size:1rem}
 blockquote{margin:0;font-style:italic}
 footer{padding:2rem 1.5rem;text-align:center;color:var(--mut);font-size:.95rem;border-top:1px solid #2a2a2a}
-#lb{position:fixed;inset:0;background:rgba(0,0,0,.94);display:none;align-items:center;justify-content:center;z-index:50}#lb.on{display:flex}
-#lb img{max-width:94vw;max-height:88vh}#lb button{position:absolute;background:none;border:0;color:#fff;font-size:2.6rem;cursor:pointer;padding:1rem}
+#contact{min-height:calc(100vh - var(--hh,70px) - 80px)}#lb{position:fixed;inset:0;background:rgba(0,0,0,.94);display:none;align-items:center;justify-content:center;z-index:50}#lb.on{display:flex}
+#lb img{max-width:94vw;max-height:88vh}#lb button:focus-visible,#lb button:hover{color:var(--acc)}#lb button{position:absolute;background:none;border:0;color:#fff;font-size:2.6rem;cursor:pointer;padding:1rem}
 #x{top:0;right:0}#p{left:0}#n{right:0}
 @media(max-width:760px){header{justify-content:center}nav{text-align:center;width:100%}nav a{margin:0 .35rem;font-size:.7rem;line-height:2.2}.about,.cols{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,1fr);gap:6px}.hero{min-height:80vh}}
-</style></head><body>
+</style></head><body id="top">
 <header><a class="brand" href="#top"><img src="img/logo-light.png" alt="Emily Coffeen Photography" width="160"></a>
-<nav><a class="cta" href="https://ecoffeenphoto.shootproof.com">Show Photos</a><a href="#equine">Equine</a><a href="#western">Western</a><a href="#about">About</a><a href="#contact">Contact</a></nav></header>
-<main id="top">
+<nav><a class="cta" href="https://ecoffeenphoto.shootproof.com" target="_blank" rel="noopener" aria-label="Find your show photos (opens ShootProof gallery in a new tab)">Show Photos <span aria-hidden="true">&#8599;</span></a><a href="#equine">Equine</a><a href="#western">Western</a><a href="#about">About</a><a href="#contact">Contact</a></nav></header>
+<main>
 <section class="hero" aria-label="Introduction"><div class="in">
 <h1><img class="hlogo" src="img/logo-light.png" alt="Emily Coffeen Photography"></h1><p class="tag">Equine &amp; Western Photography</p>
-<a class="btn" href="https://ecoffeenphoto.shootproof.com">Find Your Show Photos &rarr;</a>
-<p class="hint">Rode at a show Emily photographed? Open the gallery, choose your show, and browse by class or number to view and order your photos.</p>
+<a class="btn" href="https://ecoffeenphoto.shootproof.com" target="_blank" rel="noopener" aria-label="Find your show photos (opens ShootProof gallery in a new tab)">Find Your Show Photos <span aria-hidden="true">&#8599;</span></a>
+<p class="hint">Rode at a show Emily photographed? Open the gallery, choose your show, and browse by class or number to view and order your photos. <em>(Opens her ShootProof gallery in a new tab &mdash; this page stays open.)</em></p>
 </div></section>
 <section id="equine"><div class="wrap"><h2>Equine</h2><div class="grid"><a href="img/equine-2.jpg" class="g"><img src="img/equine-2.jpg" alt="Equine photograph by Emily Coffeen 1" loading="lazy"></a>
 <a href="img/equine-3.jpg" class="g"><img src="img/equine-3.jpg" alt="Equine photograph by Emily Coffeen 2" loading="lazy"></a>
@@ -85,7 +85,7 @@ footer{padding:2rem 1.5rem;text-align:center;color:var(--mut);font-size:.95rem;b
 <section id="contact"><div class="wrap"><h2>Contact</h2>
 <p>Questions about your show photos or an upcoming show? Reach Emily directly:</p>
 <p style="font-size:1.25rem">Phone: <a href="tel:+12108424727">210-842-4727</a><br>Email: <a href="mailto:emilycoffeenphotography@gmail.com">emilycoffeenphotography@gmail.com</a></p>
-<p><a class="btn" style="font-size:1rem;padding:.7rem 1.4rem" href="https://ecoffeenphoto.shootproof.com">Find Your Show Photos</a></p></div></section>
+<p><a class="btn" style="font-size:1rem;padding:.7rem 1.4rem" href="https://ecoffeenphoto.shootproof.com" target="_blank" rel="noopener" aria-label="Find your show photos (opens ShootProof gallery in a new tab)">Find Your Show Photos <span aria-hidden="true">&#8599;</span></a><br><span class="small" style="color:var(--mut)">Opens Emily&rsquo;s ShootProof gallery in a new tab.</span></p></div></section>
 </main>
 <footer>&copy; Emily Coffeen Photography. All photographs &copy; Emily Coffeen. &middot; <a href="#organizers">Show managers</a></footer>
 <div id="lb" role="dialog" aria-label="Image viewer"><button id="x" aria-label="Close">&times;</button><button id="p" aria-label="Previous">&#8249;</button><img alt=""><button id="n" aria-label="Next">&#8250;</button></div>
@@ -95,5 +95,6 @@ function show(){I.src=A[k].href;I.alt=A[k].querySelector('img').alt}
 document.querySelectorAll('.grid').forEach(g=>g.addEventListener('click',e=>{const a=e.target.closest('a');if(!a)return;e.preventDefault();A=[...g.querySelectorAll('a')];k=A.indexOf(a);show();L.classList.add('on')}));
 x.onclick=()=>L.classList.remove('on');p.onclick=()=>{k=(k-1+A.length)%A.length;show()};n.onclick=()=>{k=(k+1)%A.length;show()};
 L.onclick=e=>{if(e.target===L)L.classList.remove('on')};
+const sh=()=>document.documentElement.style.setProperty("--hh",document.querySelector("header").offsetHeight+"px");sh();addEventListener("resize",sh);
 document.onkeydown=e=>{if(!L.classList.contains('on'))return;if(e.key=='Escape')x.click();if(e.key=='ArrowLeft')p.click();if(e.key=='ArrowRight')n.click()};
 </script></body></html>
