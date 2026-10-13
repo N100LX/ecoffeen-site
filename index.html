@@ -33,13 +33,13 @@ footer{padding:2rem 1.5rem;text-align:center;color:var(--mut);font-size:.95rem;b
 #x{top:0;right:0}#p{left:0}#n{right:0}
 @media(max-width:760px){header{justify-content:center}nav{text-align:center;width:100%}nav a{margin:0 .35rem;font-size:.7rem;line-height:2.2}.about,.cols{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,1fr);gap:6px}.hero{min-height:80vh}}
 </style></head><body id="top">
-<header><a class="brand" href="#top"><img src="img/logo-light.png" alt="Emily Coffeen Photography" width="160"></a>
-<nav><a class="cta" href="https://ecoffeenphoto.shootproof.com" target="_blank" rel="noopener" aria-label="Find your show photos (opens ShootProof gallery in a new tab)">Show Photos <span aria-hidden="true">&#8599;</span></a><a href="#equine">Equine</a><a href="#western">Western</a><a href="#about">About</a><a href="#contact">Contact</a></nav></header>
+<header><a class="brand" href="index.html"><img src="img/logo-light.png" alt="Emily Coffeen Photography" width="160"></a>
+<nav><a class="cta" href="shows.html">Show Photos &rarr;</a><a href="#equine">Equine</a><a href="#western">Western</a><a href="#about">About</a><a href="#contact">Contact</a></nav></header>
 <main>
 <section class="hero" aria-label="Introduction"><div class="in">
 <h1><img class="hlogo" src="img/logo-light.png" alt="Emily Coffeen Photography"></h1><p class="tag">Equine &amp; Western Photography</p>
-<a class="btn" href="https://ecoffeenphoto.shootproof.com" target="_blank" rel="noopener" aria-label="Find your show photos (opens ShootProof gallery in a new tab)">Find Your Show Photos <span aria-hidden="true">&#8599;</span></a>
-<p class="hint">Rode at a show Emily photographed? Open the gallery, choose your show, and browse by class or number to view and order your photos. <em>(Opens her ShootProof gallery in a new tab &mdash; this page stays open.)</em></p>
+<a class="btn" href="shows.html">Find Your Show Photos &rarr;</a>
+<p class="hint">Rode at a show Emily photographed? Pick your show from the list, and browse by class or number to view and order your photos.</p>
 </div></section>
 <section id="equine"><div class="wrap"><h2>Equine</h2><div class="grid"><a href="img/equine-2.jpg" class="g"><img src="img/equine-2.jpg" alt="Equine photograph by Emily Coffeen 1" loading="lazy"></a>
 <a href="img/equine-3.jpg" class="g"><img src="img/equine-3.jpg" alt="Equine photograph by Emily Coffeen 2" loading="lazy"></a>
@@ -85,7 +85,7 @@ footer{padding:2rem 1.5rem;text-align:center;color:var(--mut);font-size:.95rem;b
 <section id="contact"><div class="wrap"><h2>Contact</h2>
 <p>Questions about your show photos or an upcoming show? Reach Emily directly:</p>
 <p style="font-size:1.25rem">Phone: <a href="tel:+12108424727">210-842-4727</a><br>Email: <a href="mailto:emilycoffeenphotography@gmail.com">emilycoffeenphotography@gmail.com</a></p>
-<p><a class="btn" style="font-size:1rem;padding:.7rem 1.4rem" href="https://ecoffeenphoto.shootproof.com" target="_blank" rel="noopener" aria-label="Find your show photos (opens ShootProof gallery in a new tab)">Find Your Show Photos <span aria-hidden="true">&#8599;</span></a><br><span class="small" style="color:var(--mut)">Opens Emily&rsquo;s ShootProof gallery in a new tab.</span></p></div></section>
+<p><a class="btn" style="font-size:1rem;padding:.7rem 1.4rem" href="shows.html">Find Your Show Photos &rarr;</a></p></div></section>
 </main>
 <footer>&copy; Emily Coffeen Photography. All photographs &copy; Emily Coffeen. &middot; <a href="#organizers">Show managers</a></footer>
 <div id="lb" role="dialog" aria-label="Image viewer"><button id="x" aria-label="Close">&times;</button><button id="p" aria-label="Previous">&#8249;</button><img alt=""><button id="n" aria-label="Next">&#8250;</button></div>
@@ -96,5 +96,6 @@ document.querySelectorAll('.grid').forEach(g=>g.addEventListener('click',e=>{con
 x.onclick=()=>L.classList.remove('on');p.onclick=()=>{k=(k-1+A.length)%A.length;show()};n.onclick=()=>{k=(k+1)%A.length;show()};
 L.onclick=e=>{if(e.target===L)L.classList.remove('on')};
 const sh=()=>document.documentElement.style.setProperty("--hh",document.querySelector("header").offsetHeight+"px");sh();addEventListener("resize",sh);
+addEventListener("load",()=>{if(location.hash.length>1){const t=document.querySelector(location.hash);t&&setTimeout(()=>t.scrollIntoView(),50)}});
 document.onkeydown=e=>{if(!L.classList.contains('on'))return;if(e.key=='Escape')x.click();if(e.key=='ArrowLeft')p.click();if(e.key=='ArrowRight')n.click()};
 </script></body></html>
