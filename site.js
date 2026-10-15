@@ -22,8 +22,20 @@ var T=d.querySelector('.totop');if(T){var tv=false;function tt(){var v=scrollY>i
 /* active section in nav */
 var NL=[].slice.call(d.querySelectorAll('nav a[href^="#"]'));if(NL.length&&'IntersectionObserver' in window){var SE=NL.map(function(a){return d.getElementById(a.getAttribute('href').slice(1))}).filter(Boolean);
 var at=0;function ac(){at=0;var cur=null,mid=innerHeight*.4;SE.forEach(function(s){var r=s.getBoundingClientRect();if(r.top<=mid&&r.bottom>mid)cur=s.id});NL.forEach(function(a){a.classList.toggle('act',!!cur&&a.getAttribute('href')==='#'+cur)})}addEventListener('scroll',function(){if(!at)at=requestAnimationFrame(ac)},{passive:true});ac()}
-/* shows filter */
-var Q=d.getElementById('q');if(Q){var CS=[].slice.call(d.querySelectorAll('.card')),CC=d.querySelector('.cards'),NO=d.querySelector('.none'),QC=d.getElementById('qc');function fl(){var v=Q.value.trim().toLowerCase(),c=0;CS.forEach(function(el){var m=!v||el.textContent.toLowerCase().indexOf(v)>-1;el.hidden=!m;if(m)c++});CC.classList.toggle('f',!!v);NO.hidden=c>0;QC.textContent=v?c+' of '+CS.length+' shows':CS.length+' shows'}Q.addEventListener('input',fl);fl()}
+/* shows filter + live list from /api/shows (ShootProof via Pages Function); static cards stay as no-JS/offline fallback */
+var Q=d.getElementById('q');if(Q){var CS,CC=d.querySelector('.cards'),NO=d.querySelector('.none'),QC=d.getElementById('qc');
+function fl(){var v=Q.value.trim().toLowerCase(),c=0;CS.forEach(function(el){var m=!v||el.textContent.toLowerCase().indexOf(v)>-1;el.hidden=!m;if(m)c++});CC.classList.toggle('f',!!v);NO.hidden=c>0;QC.textContent=v?c+' of '+CS.length+' shows':CS.length+' shows'}
+function grab(){CS=[].slice.call(CC.querySelectorAll('.card'))}grab();Q.addEventListener('input',fl);fl();
+function key(a){return a.map(function(x){return x.name+'\n'+x.url}).join('\n')}
+function card(x,i){var a=d.createElement('a'),p=d.createElement('picture'),im=d.createElement('img'),dv=d.createElement('div'),h=d.createElement('h3'),sp=d.createElement('span');
+ a.className='card';a.href=x.url;a.target='_blank';a.rel='noopener';im.src=x.cover;im.alt='Cover photo: '+x.name;im.width=x.w;im.height=x.h;
+ if(i===0)im.setAttribute('fetchpriority','high');if(i>3)im.loading='lazy';im.decoding='async';h.textContent=x.name;sp.textContent='View & order photos \u2197';
+ p.appendChild(im);dv.appendChild(h);dv.appendChild(sp);a.appendChild(p);a.appendChild(dv);return a}
+if(window.fetch&&CC)fetch('/api/shows').then(function(r){return r.ok?r.json():null}).then(function(j){
+ if(!j||!Array.isArray(j.shows))return;var L=j.shows.filter(function(x){return x&&typeof x.name==='string'&&/^https:\/\/ecoffeenphoto\.shootproof\.com\//.test(x.url)&&/^https:\/\/d2rxqglyhdohqf\.cloudfront\.net\//.test(x.cover)});
+ if(!L.length)return;var cur=CS.map(function(el){return{name:el.querySelector('h3').textContent,url:el.href}});
+ if(key(cur)===key(L))return;var f=d.createDocumentFragment();L.forEach(function(x,i){f.appendChild(card(x,i))});
+ CS.forEach(function(el){el.remove()});CC.appendChild(f);grab();fl()}).catch(function(){})}
 /* lightbox */
 var L=d.getElementById('lb');if(!L)return;
 var I=L.querySelector('img'),C=d.getElementById('lbc'),X=d.getElementById('x'),P=d.getElementById('p'),N=d.getElementById('n'),A=[],k=0,last=null;
