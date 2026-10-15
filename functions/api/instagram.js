@@ -2,8 +2,9 @@
 //   {"count":N,"updated":"ISO","posts":[{"code","url","thumb","video"}, ...]}
 // Zero-token: fetches the logged-out Instagram profile HTML and reads the
 // embedded Relay payload (polaris_ordered_timeline_connection in data-sjs).
-// Same edge-cache pattern as /api/shows. Instagram may rate-limit datacenter
-// IPs; on failure we return 502 and the client hides the section.
+// Same edge-cache pattern as /api/shows. Instagram often rate-limits / blocks
+// datacenter IPs (HTTP 429); on scrape failure we serve data/instagram.json
+// (refreshed at build time) so the home-page row still appears.
 const HANDLE = 'emily_coffeen_photography';
 const PROFILE = 'https://www.instagram.com/' + HANDLE + '/';
 const FRESH = 600;    // 10 min: serve cached without re-hitting Instagram
@@ -57,6 +58,21 @@ function thumbOk(u) {
   } catch (e) { return false; }
 }
 
+function sanitize(posts) {
+  const out = [];
+  for (const p of posts || []) {
+    if (!p || typeof p.code !== 'string' || !/^[A-Za-z0-9_-]{5,20}$/.test(p.code)) continue;
+    if (!thumbOk(p.thumb)) continue;
+    let url = p.url;
+    if (typeof url !== 'string' || !/^https:\/\/www\.instagram\.com\/(p|reel)\/[A-Za-z0-9_-]+\//.test(url)) {
+      url = 'https://www.instagram.com/' + (p.video ? 'reel' : 'p') + '/' + p.code + '/';
+    }
+    out.push({ code: p.code, url, thumb: p.thumb, video: !!p.video });
+    if (out.length >= LIMIT) break;
+  }
+  return out;
+}
+
 function parsePosts(html) {
   if (!html || html.length < 1000) throw new Error('Instagram: empty page');
   if (/\/accounts\/login/.test(html) && !/xig_user_by_username/.test(html)) {
@@ -98,7 +114,7 @@ function parsePosts(html) {
   return best.slice(0, LIMIT);
 }
 
-async function load() {
+async function scrape() {
   let res = await fetch(PROFILE, { headers: PAGE_HEADERS, redirect: 'follow', cf: { cacheTtl: 0 } });
   if (!res.ok) throw new Error('Instagram HTTP ' + res.status);
   let html = await res.text();
@@ -117,7 +133,28 @@ async function load() {
   return parsePosts(html);
 }
 
-const respond = (body, status, age) => new Response(body, {
+async function loadFallback(request) {
+  const url = new URL('/data/instagram.json', request.url);
+  const r = await fetch(url.toString(), { cf: { cacheTtl: 60 } });
+  if (!r.ok) throw new Error('fallback HTTP ' + r.status);
+  const j = await r.json();
+  const posts = sanitize(j && j.posts);
+  if (!posts.length) throw new Error('fallback empty');
+  return { posts, updated: (j && j.updated) || new Date().toISOString(), source: 'fallback' };
+}
+
+async function load(request) {
+  try {
+    const posts = await scrape();
+    return { posts, updated: new Date().toISOString(), source: 'live' };
+  } catch (e) {
+    console.log('instagram scrape failed', String(e && e.message || e));
+    const fb = await loadFallback(request);
+    return fb;
+  }
+}
+
+const respond = (body, status, age, source) => new Response(body, {
   status,
   headers: {
     'Content-Type': 'application/json; charset=utf-8',
@@ -125,6 +162,7 @@ const respond = (body, status, age) => new Response(body, {
     'X-Content-Type-Options': 'nosniff',
     'Access-Control-Allow-Origin': '*',
     ...(age != null ? { 'X-Cache-Age': String(age) } : {}),
+    ...(source ? { 'X-IG-Source': source } : {}),
   },
 });
 
@@ -134,13 +172,17 @@ function keyFor(request) {
 }
 
 async function refresh(cache, request) {
-  const posts = await load();
-  const body = JSON.stringify({ count: posts.length, updated: new Date().toISOString(), handle: HANDLE, posts });
+  const { posts, updated, source } = await load(request);
+  const body = JSON.stringify({ count: posts.length, updated, handle: HANDLE, source, posts });
+  // Only cache live scrapes for the long STALE window; fallback gets a short edge TTL
+  // so we keep retrying Instagram after a rate-limit clears.
+  const ttl = source === 'live' ? STALE : 300;
   const stored = new Response(body, { headers: {
-    'Content-Type': 'application/json', 'Cache-Control': `public, max-age=${STALE}`, 'X-Stored': String(Date.now()),
+    'Content-Type': 'application/json', 'Cache-Control': `public, max-age=${ttl}`,
+    'X-Stored': String(Date.now()), 'X-IG-Source': source,
   } });
   try { await cache.put(keyFor(request), stored); } catch (e) { console.log('cache put failed', e); }
-  return body;
+  return { body, source };
 }
 
 export async function onRequestGet(ctx) {
@@ -149,12 +191,15 @@ export async function onRequestGet(ctx) {
   try { hit = await cache.match(key); } catch (e) { console.log('cache match failed', e); }
   if (hit) {
     const age = Math.round((Date.now() - +(hit.headers.get('X-Stored') || 0)) / 1000);
+    const source = hit.headers.get('X-IG-Source') || '';
     const body = await hit.text();
-    if (age > FRESH) ctx.waitUntil(refresh(cache, ctx.request).catch(() => {}));
-    if (age <= STALE) return respond(body, 200, age);
+    const freshFor = source === 'live' ? FRESH : 120;
+    if (age > freshFor) ctx.waitUntil(refresh(cache, ctx.request).catch(() => {}));
+    if (age <= STALE) return respond(body, 200, age, source);
   }
   try {
-    return respond(await refresh(cache, ctx.request), 200, 0);
+    const { body, source } = await refresh(cache, ctx.request);
+    return respond(body, 200, 0, source);
   } catch (e) {
     return respond(JSON.stringify({ error: 'upstream', detail: String(e && e.message || e) }), 502);
   }
