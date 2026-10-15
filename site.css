@@ -42,7 +42,7 @@ section{padding:clamp(4rem,9vw,7rem) var(--pad)}
 .ph{border:1px dashed #666;padding:1rem 1.2rem;color:var(--mut);border-radius:4px}.tagph{font-size:.8rem;text-transform:uppercase;letter-spacing:.1em;color:#e8a24a}
 .alt{background:var(--bg2)}.cols{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,5vw,4.5rem)}.small{font-size:1rem}
 blockquote{margin:0 0 1rem;font-style:italic}
-.contact-lines{font-size:1.25rem;margin:1.5rem 0 2rem}.contact-lines a{word-break:break-word}
+.contact-lines{font-size:1.25rem;margin:1.5rem 0 2rem;list-style:none;padding:0}.contact-lines a{word-break:break-word}
 .actions{display:flex;flex-wrap:wrap;gap:1rem}
 footer{padding:2.5rem var(--pad);text-align:center;color:var(--mut);font-size:.95rem;border-top:1px solid var(--line)}
 /* lightbox */
@@ -89,7 +89,7 @@ body{animation:pgin .8s ease-out both}@keyframes pgin{from{opacity:0}to{opacity:
 .card{transition:border-color .25s,transform .3s ease,box-shadow .3s ease}
 .card:hover,.card:focus-visible{transform:translateY(-6px);box-shadow:0 14px 30px rgba(0,0,0,.55)}
 @media(prefers-reduced-motion:reduce){body{animation:none}.hero{background-position:center}.card:hover,.card:focus-visible{transform:none}}
-.nowrap{white-space:nowrap}@media(max-width:760px){.contact-lines .nowrap{font-size:clamp(.72rem,3.9vw,1rem)}}
+.nowrap{white-space:nowrap}
 /* v2: hero slideshow */
 .hero{position:relative;overflow:hidden;isolation:isolate}
 .hero .in{position:relative;z-index:2}
@@ -107,9 +107,9 @@ body{animation:pgin .8s ease-out both}@keyframes pgin{from{opacity:0}to{opacity:
 /* v2: ornaments */
 h2::after{width:80px;background:linear-gradient(90deg,var(--acc),rgba(201,164,106,0));opacity:.7}
 h2{font-weight:500;letter-spacing:.03em}
-.orn{display:flex;align-items:center;justify-content:center;gap:1rem;max-width:1200px;margin:0 auto;padding:0 var(--pad);color:var(--acc);opacity:.6}
-.orn::before,.orn::after{content:"";flex:1;max-width:260px;height:1px;background:linear-gradient(90deg,transparent,currentColor)}
-.orn::after{transform:scaleX(-1)}.orn span{font-size:.7rem;letter-spacing:.3em;transform:rotate(45deg);display:block;width:7px;height:7px;border:1px solid currentColor}
+.orn{display:flex;align-items:center;justify-content:center;gap:1.15rem;max-width:1200px;margin:0 auto;padding:clamp(.5rem,1.5vw,1rem) var(--pad);color:var(--acc);opacity:.58}
+.orn::before,.orn::after{content:"";flex:1;max-width:240px;height:1px;background:linear-gradient(90deg,transparent,rgba(201,164,106,.9))}
+.orn::after{transform:scaleX(-1)}.orn span{transform:rotate(45deg);display:block;width:8px;height:8px;border:1px solid currentColor;flex-shrink:0;box-sizing:border-box}
 /* v2: strip */
 .strip{position:relative;overflow:hidden;height:clamp(220px,46vw,560px);background:#111;border-top:1px solid rgba(201,164,106,.25);border-bottom:1px solid rgba(201,164,106,.25);box-shadow:inset 0 30px 40px -20px #111,inset 0 -30px 40px -20px #181818}
 .strip::before{content:"";position:absolute;inset:-18% 0;z-index:-1;background:url(/img/equine-23-2000.webp) center/cover;transform:translate3d(0,var(--sy,0px),0)}.strip{isolation:isolate}
@@ -203,23 +203,41 @@ header.shrink{background:rgba(13,13,13,.97);box-shadow:0 8px 24px -12px rgba(0,0
 #lbc{letter-spacing:.2em;font-size:.8rem}
 /* v4: rhythm */
 .lead{margin-bottom:2.4rem}
-.contact-lines{line-height:1.9}
+.contact-lines{line-height:1.55}
+
+/* Contact polish */
+#contact{display:flex;align-items:center;padding-top:clamp(4rem,9vw,6.5rem);padding-bottom:clamp(4rem,9vw,6.5rem)}
+#contact .contact-inner{width:100%}
+#contact .contact-lead{color:var(--mut);max-width:38rem;margin:0 0 .25rem;line-height:1.65}
+#contact .contact-lines{display:flex;flex-direction:column;gap:clamp(.85rem,2vw,1.15rem);margin:1.6rem 0 2.15rem;font-size:clamp(1.05rem,2.4vw,1.28rem)}
+#contact .contact-lines li{margin:0;padding:0}
+#contact .contact-lines a{color:var(--acc);text-decoration:none;border-bottom:1px solid transparent;padding-bottom:1px;transition:border-color .25s ease,color .25s ease;word-break:break-word}
+#contact .contact-lines a:hover,#contact .contact-lines a:focus-visible{border-bottom-color:rgba(201,164,106,.55);color:#e0bd82}
+#contact .actions{margin-top:.15rem;gap:1rem 1.1rem}
+@media(max-width:760px){
+  #contact .contact-lines{font-size:clamp(1rem,4.2vw,1.15rem);gap:.95rem}
+  #contact .contact-lines .nowrap{font-size:clamp(.78rem,3.6vw,1rem);display:inline-block;max-width:100%}
+  #contact .actions{flex-direction:column;align-items:stretch}
+  #contact .actions .btn{text-align:center}
+}
 @media(prefers-reduced-motion:reduce){.hsd{display:none}.btn::after{display:none}.btn,.g,.card::after,header,.brand img{transition:none}}
 .hero h1{position:relative;width:min(440px,72vw)}
 .hero h1::after{content:"";position:absolute;inset:0;pointer-events:none;-webkit-mask:url(/img/logo-light.png) center/100% 100% no-repeat;mask:url(/img/logo-light.png) center/100% 100% no-repeat;background:linear-gradient(105deg,transparent 35%,rgba(232,196,120,.0) 40%,rgba(240,205,130,.85) 50%,rgba(232,196,120,0) 60%,transparent 65%) no-repeat;background-size:250% 100%;background-position:150% 0;animation:lshim 7s ease-in-out 1.6s infinite}
 @keyframes lshim{0%{background-position:150% 0}45%,100%{background-position:-50% 0}}
 @media(prefers-reduced-motion:reduce){.hero h1::after{animation:none;display:none}}
 /* Instagram live row */
-#instagram{padding-top:clamp(3.5rem,8vw,6rem);padding-bottom:clamp(3.5rem,8vw,6rem);background:linear-gradient(180deg,#111 0%,#14110e 50%,#111 100%)}
-#instagram .ig-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:.6rem 1.5rem;margin-bottom:.5rem}
+#instagram{padding-top:clamp(2.75rem,6.5vw,5rem);padding-bottom:clamp(1.75rem,4.5vw,3.25rem);background:linear-gradient(180deg,#111 0%,#14110e 50%,#111 100%)}
+#instagram[hidden]+.orn-after-ig{display:none!important}
+#instagram .ig-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:.6rem 1.5rem;margin-bottom:.35rem}
 #instagram .ig-head h2{margin-bottom:0}
 #instagram .ig-head h2::after{margin-top:.7rem}
 #instagram .ig-more{font-size:.9rem;letter-spacing:.08em;text-decoration:none;color:var(--mut);border-bottom:1px solid transparent;transition:color .2s,border-color .2s}
 #instagram .ig-more:hover,#instagram .ig-more:focus-visible{color:var(--acc);border-bottom-color:rgba(201,164,106,.45)}
+.orn-after-ig{padding-top:clamp(.75rem,2vw,1.25rem);padding-bottom:clamp(.75rem,2vw,1.25rem)}
 .ig-scroller{margin-top:1.6rem;margin-left:calc(var(--pad) * -1);margin-right:calc(var(--pad) * -1);padding-left:var(--pad);padding-right:var(--pad);overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:#3a342b transparent;overscroll-behavior-x:contain}
 .ig-scroller::-webkit-scrollbar{height:8px}
 .ig-scroller::-webkit-scrollbar-thumb{background:#3a342b;border-radius:4px}
-.ig-row{display:flex;gap:clamp(10px,1.4vw,16px);width:max-content;padding:.2rem 0 1rem}
+.ig-row{display:flex;gap:clamp(10px,1.4vw,16px);width:max-content;padding:.2rem 0 .55rem}
 .ig-tile{position:relative;flex:0 0 auto;width:clamp(132px,16vw,168px);aspect-ratio:4/5;border-radius:3px;overflow:hidden;background:#1c1c1c;scroll-snap-align:start;text-decoration:none;color:inherit;box-shadow:0 6px 18px -8px rgba(0,0,0,.6);transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .4s ease}
 .ig-tile img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .7s cubic-bezier(.2,.7,.2,1),filter .4s,opacity .8s ease;opacity:0}
 .ig-tile.ld img{opacity:1}
