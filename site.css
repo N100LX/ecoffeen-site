@@ -90,3 +90,34 @@ body{animation:pgin .8s ease-out both}@keyframes pgin{from{opacity:0}to{opacity:
 .card:hover,.card:focus-visible{transform:translateY(-6px);box-shadow:0 14px 30px rgba(0,0,0,.55)}
 @media(prefers-reduced-motion:reduce){body{animation:none}.hero{background-position:center}.card:hover,.card:focus-visible{transform:none}}
 .nowrap{white-space:nowrap}@media(max-width:760px){.contact-lines .nowrap{font-size:clamp(.72rem,3.9vw,1rem)}}
+/* v2: hero slideshow */
+.hero{position:relative;overflow:hidden;isolation:isolate}
+.hero .in{position:relative;z-index:2}
+.hs{position:absolute;inset:0;z-index:0;transform:translate3d(0,var(--py,0px),0)}
+.hs::after{content:"";position:absolute;inset:0;z-index:3;background:linear-gradient(to top,rgba(0,0,0,.88),rgba(0,0,0,.1) 62%)}
+.hs i{position:absolute;inset:0;background:center/cover no-repeat;opacity:0;transition:opacity 1.5s ease}
+.hs i.on{opacity:1;animation:kb 7.5s linear both}.hs i.out{opacity:0;animation:kb 7.5s linear both}
+@keyframes kb{from{transform:scale(1)}to{transform:scale(1.07)}}
+/* v2: justified grid */
+.grid,.grid.two{display:flex;flex-wrap:wrap;gap:clamp(16px,2.2vw,28px)}
+.grid::after{content:"";flex:999 1 0}
+.grid .g{flex:var(--ar,1.5) 1 calc(var(--ar,1.5) * clamp(170px,15vw,250px));min-width:0}
+.grid.two .g{flex-basis:calc(var(--ar,1.5) * clamp(220px,22vw,330px))}
+.g img{aspect-ratio:auto;height:100%;object-fit:cover}
+/* v2: ornaments */
+h2::after{width:80px;background:linear-gradient(90deg,var(--acc),rgba(201,164,106,0));opacity:.7}
+h2{font-weight:500;letter-spacing:.03em}
+.orn{display:flex;align-items:center;justify-content:center;gap:1rem;max-width:1200px;margin:0 auto;padding:0 var(--pad);color:var(--acc);opacity:.6}
+.orn::before,.orn::after{content:"";flex:1;max-width:260px;height:1px;background:linear-gradient(90deg,transparent,currentColor)}
+.orn::after{transform:scaleX(-1)}.orn span{font-size:.7rem;letter-spacing:.3em;transform:rotate(45deg);display:block;width:7px;height:7px;border:1px solid currentColor}
+/* v2: strip */
+.strip{position:relative;overflow:hidden;height:clamp(220px,46vw,560px);background:#111;border-top:1px solid rgba(201,164,106,.25);border-bottom:1px solid rgba(201,164,106,.25);box-shadow:inset 0 30px 40px -20px #111,inset 0 -30px 40px -20px #181818}
+.strip::before{content:"";position:absolute;inset:-18% 0;z-index:-1;background:url(img/equine-23-2000.webp) center/cover;transform:translate3d(0,var(--sy,0px),0)}.strip{isolation:isolate}
+/* v2: lightbox */
+#lb img{transition:opacity .3s ease,transform .3s ease}
+#lb.on img{animation:zi .4s cubic-bezier(.2,.7,.2,1)}
+#lb img.sw{opacity:0;transform:translateX(var(--dx,0))}
+@keyframes zi{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
+#lb{touch-action:none}
+@media(max-width:760px){.grid .g,.grid.two .g{flex:1 1 100%}.grid{gap:22px}.strip{height:clamp(200px,58vw,320px)}}
+@media(prefers-reduced-motion:reduce){.hs i{transition:none;animation:none!important}.strip::before{transform:none}.hs{transform:none}#lb.on img{animation:none}#lb img{transition:none}}
