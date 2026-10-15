@@ -121,3 +121,4 @@ h2{font-weight:500;letter-spacing:.03em}
 #lb{touch-action:none}
 @media(max-width:760px){.grid .g,.grid.two .g{flex:1 1 100%}.grid{gap:22px}.strip{height:clamp(200px,58vw,320px)}}
 @media(prefers-reduced-motion:reduce){.hs i{transition:none;animation:none!important}.strip::before{transform:none}.hs{transform:none}#lb.on img{animation:none}#lb img{transition:none}}
+.hero{background-position:center!important;min-height:88svh}.hs,.strip::before{will-change:transform;backface-visibility:hidden}@media(max-width:760px){.hero{min-height:78svh}}
