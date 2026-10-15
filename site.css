@@ -206,7 +206,7 @@ header.shrink{background:rgba(13,13,13,.97);box-shadow:0 8px 24px -12px rgba(0,0
 .contact-lines{line-height:1.55}
 
 /* Contact polish */
-#contact{display:flex;align-items:center;padding-top:clamp(4rem,9vw,6.5rem);padding-bottom:clamp(4rem,9vw,6.5rem)}
+#contact{display:flex;align-items:center;padding-top:clamp(4rem,9vw,6.5rem);padding-bottom:clamp(4rem,9vw,6.5rem);border-top:none;box-shadow:none}
 #contact .contact-inner{width:100%}
 #contact .contact-lead{color:var(--mut);max-width:38rem;margin:0 0 .25rem;line-height:1.65}
 #contact .contact-lines{display:flex;flex-direction:column;gap:clamp(.85rem,2vw,1.15rem);margin:1.6rem 0 2.15rem;font-size:clamp(1.05rem,2.4vw,1.28rem)}
@@ -226,7 +226,8 @@ header.shrink{background:rgba(13,13,13,.97);box-shadow:0 8px 24px -12px rgba(0,0
 @keyframes lshim{0%{background-position:150% 0}45%,100%{background-position:-50% 0}}
 @media(prefers-reduced-motion:reduce){.hero h1::after{animation:none;display:none}}
 /* Instagram live row */
-#instagram{padding-top:clamp(2.75rem,6.5vw,5rem);padding-bottom:clamp(1.75rem,4.5vw,3.25rem);background:linear-gradient(180deg,#111 0%,#14110e 50%,#111 100%)}
+#instagram{padding-top:clamp(2.75rem,6.5vw,5rem);padding-bottom:clamp(1.75rem,4.5vw,3.25rem);background:linear-gradient(180deg,#111 0%,#14110e 50%,#111 100%);border-bottom:none;box-shadow:none}
+#instagram[hidden]+.orn-after-ig{display:none!important}
 #instagram .ig-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:.6rem 1.5rem;margin-bottom:.35rem}
 #instagram .ig-head h2{margin-bottom:0}
 #instagram .ig-head h2::after{margin-top:.7rem}
