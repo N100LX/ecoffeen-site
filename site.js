@@ -36,6 +36,27 @@ if(window.fetch&&CC)fetch('/api/shows').then(function(r){return r.ok?r.json():nu
  if(!L.length)return;var cur=CS.map(function(el){return{name:el.querySelector('h3').textContent,url:el.href}});
  if(key(cur)===key(L))return;var f=d.createDocumentFragment();L.forEach(function(x,i){f.appendChild(card(x,i))});
  CS.forEach(function(el){el.remove()});CC.appendChild(f);grab();fl()}).catch(function(){})}
+/* Instagram live row from /api/instagram (Pages Function scrapes public profile; hide section on failure) */
+var IG=d.getElementById('instagram'),IR=d.getElementById('ig-row');
+if(IG&&IR&&window.fetch)fetch('/api/instagram').then(function(r){return r.ok?r.json():null}).then(function(j){
+ if(!j||!Array.isArray(j.posts))return;
+ var L=j.posts.filter(function(x){return x&&typeof x.code==='string'&&/^https:\/\/www\.instagram\.com\/(p|reel)\/[A-Za-z0-9_-]+\//.test(x.url)&&/^https:\/\/[^"'<>\s]+/.test(x.thumb)&&(x.thumb.indexOf('cdninstagram.com')>-1||x.thumb.indexOf('fbcdn.net')>-1)}).slice(0,9);
+ if(!L.length)return;
+ var f=d.createDocumentFragment();
+ L.forEach(function(x,i){
+  var a=d.createElement('a'),im=d.createElement('img');
+  a.className='ig-tile';a.href=x.url;a.target='_blank';a.rel='noopener';a.setAttribute('aria-label','Instagram post');
+  im.src=x.thumb;im.alt='';im.width=320;im.height=320;im.decoding='async';
+  if(i>2)im.loading='lazy';
+  im.addEventListener('load',function(){a.classList.add('ld')});im.addEventListener('error',function(){a.classList.add('ld')});
+  if(im.complete&&im.naturalWidth)a.classList.add('ld');
+  a.appendChild(im);f.appendChild(a);
+ });
+ IR.appendChild(f);IG.hidden=false;IG.querySelectorAll('.rv').forEach(function(el){el.classList.add('in')});
+ var tiles=[].slice.call(IR.querySelectorAll('.ig-tile'));
+ if('IntersectionObserver' in window&&!rm){var io2=new IntersectionObserver(function(es){var n=0;es.forEach(function(e){if(e.isIntersecting){e.target.style.transitionDelay=Math.min(n++,6)*70+'ms';e.target.classList.add('in');io2.unobserve(e.target)}})},{rootMargin:'0px 0px -6% 0px'});tiles.forEach(function(el){io2.observe(el)})}
+ else tiles.forEach(function(el){el.classList.add('in')});
+}).catch(function(){});
 /* lightbox */
 var L=d.getElementById('lb');if(!L)return;
 var I=L.querySelector('img'),C=d.getElementById('lbc'),X=d.getElementById('x'),P=d.getElementById('p'),N=d.getElementById('n'),A=[],k=0,last=null;
