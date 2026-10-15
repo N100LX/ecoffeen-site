@@ -14,7 +14,7 @@
   functions/api/instagram.js when live scrape is rate-limited). Skip with --no-instagram.
 Edit site.css / site.js / *.html normally, then rerun this. Needs node (npx terser).
 """
-import hashlib, html, json, os, re, subprocess, sys, urllib.request
+import hashlib, html, json, os, re, subprocess, sys, urllib.parse, urllib.request
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(ROOT)
 PAGES = ['index.html', 'shows.html', '404.html']
@@ -60,7 +60,7 @@ def refresh_shows():
     cards = []
     for i, (n, u, c, w, h) in enumerate(shows):
         att = ' fetchpriority="high"' if i == 0 else (' loading="lazy"' if i > 3 else '')
-        cards.append('<a class="card" href="%s" target="_blank" rel="noopener"><picture><img src="%s" alt="Cover photo: %s" width="%d" height="%d"%s decoding="async"></picture><div><h3>%s</h3><span>View &amp; order photos &#8599;</span></div></a>' % (e(u), e(c), e(n), w, h, att, e(n)))
+        cards.append('<a class="card" href="%s" target="_blank" rel="noopener"><picture><img src="/api/thumb?u=%s" alt="Cover photo: %s" width="%d" height="%d"%s decoding="async"></picture><div><h3>%s</h3><span>View &amp; order photos &#8599;</span></div></a>' % (e(u), e(urllib.parse.quote(c, safe='')), e(n), w, h, att, e(n)))
     h = open('shows.html').read()
     h2 = re.sub(r'(<div class="cards"><p class="none" hidden>.*?</p>).*?(</div>\n<p style="margin-top:2rem")', lambda m: m.group(1) + '\n'.join(cards) + m.group(2), h, count=1, flags=re.S)
     if h2 == h and len(shows): print('shows: unchanged')

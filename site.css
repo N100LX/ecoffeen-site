@@ -36,8 +36,8 @@ section{padding:var(--sec-y) var(--pad)}
 .g{display:block;overflow:hidden;border-radius:3px;background:#1c1c1c;position:relative}
 .g img{width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;display:block;transition:transform .7s cubic-bezier(.2,.7,.2,1),filter .4s}
 .g::after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 0 1px rgba(201,164,106,0);transition:box-shadow .4s}
-.g:hover img,.g:focus-visible img{transform:scale(1.035);filter:brightness(1.06)}
-.g:hover::after,.g:focus-visible::after{box-shadow:inset 0 0 0 1px rgba(201,164,106,.55)}
+.g:focus-visible img{transform:scale(1.035);filter:brightness(1.06)}
+.g:focus-visible::after{box-shadow:inset 0 0 0 1px rgba(201,164,106,.55)}
 .about{display:grid;grid-template-columns:1fr 1.4fr;gap:clamp(2rem,5vw,4.5rem);align-items:center}.about img{width:100%;height:auto;border-radius:4px;display:block}
 .ph{border:1px dashed #666;padding:1rem 1.2rem;color:var(--mut);border-radius:4px}.tagph{font-size:.8rem;text-transform:uppercase;letter-spacing:.1em;color:#e8a24a}
 .alt{background:var(--bg2)}.cols{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,5vw,4.5rem)}.small{font-size:1rem}
@@ -59,7 +59,7 @@ footer{padding:2.5rem var(--pad);text-align:center;color:var(--mut);font-size:.9
 /* shows page */
 .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:clamp(14px,2vw,24px);margin-top:2rem}
 .card{display:block;background:#1a1a1a;border:1px solid var(--line);border-radius:6px;overflow:hidden;color:var(--fg);text-decoration:none;transition:border-color .25s,transform .25s}
-.card:hover,.card:focus-visible{border-color:var(--acc);transform:translateY(-2px)}
+.card:focus-visible{border-color:var(--acc);transform:translateY(-2px)}
 .card img{width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;display:block;background:#222}
 .card div{padding:.9rem 1.1rem 1.1rem}.card h3{font-size:1.45rem;margin:0}.card span{font-size:.9rem;color:var(--acc)}
 .back{display:inline-block;margin-bottom:1.2rem;font-size:1.05rem}
@@ -87,7 +87,7 @@ ul.ph{padding-left:2.2rem}ul.ph li.tagph{margin-left:-1rem}
 body{animation:pgin .8s ease-out both}@keyframes pgin{from{opacity:0}to{opacity:1}}
 .hero{background-position:center calc(50% + var(--py,0px))}
 .card{transition:border-color .25s,transform .3s ease,box-shadow .3s ease}
-.card:hover,.card:focus-visible{transform:translateY(-6px);box-shadow:0 14px 30px rgba(0,0,0,.55)}
+.card:focus-visible{transform:translateY(-6px);box-shadow:0 14px 30px rgba(0,0,0,.55)}
 @media(prefers-reduced-motion:reduce){body{animation:none}.hero{background-position:center}.card:hover,.card:focus-visible{transform:none}}
 .nowrap{white-space:nowrap}
 /* v2: hero slideshow */
@@ -125,7 +125,7 @@ h2{font-weight:500;letter-spacing:.03em}
 /* v3: soft image load */
 .js .g img{opacity:0;filter:blur(14px);transform:scale(1.04);transition:opacity .9s ease,filter 1.1s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
 .js .g.ld img{opacity:1;filter:none;transform:none}
-.js .g.ld:hover img,.js .g.ld:focus-visible img{transform:scale(1.035);filter:brightness(1.06)}
+.js .g.ld:focus-visible img{transform:scale(1.035);filter:brightness(1.06)}
 /* v3: hero quote */
 .hero p.quote{font-family:"Cormorant Garamond",Georgia,serif;font-style:italic;font-size:clamp(1.15rem,2.2vw,1.5rem);line-height:1.4;color:var(--fg);opacity:.88;max-width:30rem;margin:-1rem 0 1.8rem;padding-left:1rem;border-left:1px solid rgba(201,164,106,.6)}
 .js .hero .in>*{animation:hin 1.1s cubic-bezier(.2,.7,.2,1) both}.js .hero .in>:nth-child(2){animation-delay:.15s}.js .hero .in>:nth-child(3){animation-delay:.3s}.js .hero .in>:nth-child(4){animation-delay:.45s}.js .hero .in>:nth-child(5){animation-delay:.6s}
@@ -146,12 +146,14 @@ nav a.act{color:var(--acc);border-bottom-color:rgba(201,164,106,.5)}
 .filter input::placeholder{color:#8d877c}
 #qc{font-size:.9rem;color:var(--mut)}.none{grid-column:1/-1;color:var(--mut)}
 .card img{transition:transform .7s cubic-bezier(.2,.7,.2,1),filter .4s}.card{position:relative}
-.card:hover img,.card:focus-visible img{transform:scale(1.04);filter:brightness(1.06)}
+.card:focus-visible img{transform:scale(1.04);filter:brightness(1.06)}
 .card:first-of-type::before{content:"Newest";position:absolute;top:.75rem;left:.75rem;z-index:2;background:var(--acc);color:#111;font-size:.7rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding:.25rem .6rem;border-radius:2px}
 .cards.f .card:first-of-type::before{display:none}
 .card picture{display:block;overflow:hidden}
 /* v3: 404 */
-.nf{min-height:72svh;display:flex;align-items:center;text-align:center;background:radial-gradient(ellipse at 50% 30%,rgba(201,164,106,.08),transparent 60%)}
+.nf{position:relative;isolation:isolate;overflow:hidden;min-height:72svh;display:flex;align-items:center;text-align:center;background:#111}
+.nf::before{content:"";position:absolute;inset:0;z-index:-2;background:#111 url(/img/equine-14.jpg) center/cover;background-image:image-set(url(/img/equine-14-2000.webp) type("image/webp"),url(/img/equine-14.jpg) type("image/jpeg"));opacity:.42}
+.nf::after{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at 50% 40%,rgba(17,17,17,.55),rgba(17,17,17,.92) 75%),linear-gradient(to bottom,rgba(17,17,17,.6),transparent 30%,transparent 70%,#111)}
 .nf .wrap{max-width:640px}.nf-k{font-family:"Cormorant Garamond",Georgia,serif;font-size:clamp(5rem,16vw,9rem);line-height:1;color:var(--acc);opacity:.35;margin:0 0 .6rem}
 .nf h1{font-size:clamp(2rem,5vw,3rem);font-weight:500}.nf .orn{margin:1.2rem auto 1.5rem}.nf-t{color:var(--mut)}
 @media(prefers-reduced-motion:reduce){.js .g img{transition:none;filter:none;transform:none;opacity:1}.js .hero .in>*{animation:none}.totop{transition:none}.card:hover img{transform:none}}
@@ -187,14 +189,14 @@ header.shrink{background:rgba(13,13,13,.97);box-shadow:0 8px 24px -12px rgba(0,0
 .btn.ghost:hover{box-shadow:0 10px 26px rgba(0,0,0,.4),0 0 18px rgba(201,164,106,.18)}
 /* v4: photo + card hover */
 .g{box-shadow:0 6px 18px -8px rgba(0,0,0,.6);transition:box-shadow .5s ease}
-.g:hover,.g:focus-visible{box-shadow:0 18px 40px -14px rgba(0,0,0,.8),0 0 0 1px rgba(201,164,106,.2)}
+.g:focus-visible{box-shadow:0 18px 40px -14px rgba(0,0,0,.8),0 0 0 1px rgba(201,164,106,.2)}
 .g::after{background:linear-gradient(180deg,rgba(201,164,106,0) 60%,rgba(201,164,106,.08));opacity:0;transition:box-shadow .4s,opacity .5s}
-.g:hover::after,.g:focus-visible::after{opacity:1;box-shadow:inset 0 0 0 1px rgba(201,164,106,.6)}
+.g:focus-visible::after{opacity:1;box-shadow:inset 0 0 0 1px rgba(201,164,106,.6)}
 .card{background:linear-gradient(180deg,#1c1c1c,#171615);border-color:#262420}
 .card::after{content:"";position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg,transparent,rgba(201,164,106,.8),transparent);opacity:0;transition:opacity .4s}
-.card:hover::after,.card:focus-visible::after{opacity:1}
-.card:hover,.card:focus-visible{border-color:rgba(201,164,106,.6);box-shadow:0 18px 36px -12px rgba(0,0,0,.7),0 0 24px -8px rgba(201,164,106,.25)}
-.card h3{transition:color .3s}.card:hover h3{color:#f0d39c}
+.card:focus-visible::after{opacity:1}
+.card:focus-visible{border-color:rgba(201,164,106,.6);box-shadow:0 18px 36px -12px rgba(0,0,0,.7),0 0 24px -8px rgba(201,164,106,.25)}
+.card h3{transition:color .3s}.card:focus-visible h3{color:#f0d39c}
 /* v4: lightbox */
 #lb{background:rgba(8,8,8,.8);-webkit-backdrop-filter:blur(16px) saturate(.8);backdrop-filter:blur(16px) saturate(.8)}
 #lb img{border-radius:2px;box-shadow:0 24px 70px rgba(0,0,0,.75),0 0 0 1px rgba(201,164,106,.12)}
@@ -243,12 +245,12 @@ header.shrink{background:rgba(13,13,13,.97);box-shadow:0 8px 24px -12px rgba(0,0
 .ig-tile img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .7s cubic-bezier(.2,.7,.2,1),filter .4s,opacity .8s ease;opacity:0}
 .ig-tile.ld img{opacity:1}
 .ig-tile::after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 0 1px rgba(201,164,106,0);background:linear-gradient(180deg,rgba(201,164,106,0) 55%,rgba(201,164,106,.1));opacity:0;transition:box-shadow .35s,opacity .4s;pointer-events:none}
-.ig-tile:hover,.ig-tile:focus-visible{transform:translateY(-4px);box-shadow:0 16px 32px -12px rgba(0,0,0,.75),0 0 0 1px rgba(201,164,106,.25)}
-.ig-tile:hover img,.ig-tile:focus-visible img{transform:scale(1.04);filter:brightness(1.06)}
-.ig-tile:hover::after,.ig-tile:focus-visible::after{opacity:1;box-shadow:inset 0 0 0 1px rgba(201,164,106,.6)}
+.ig-tile:focus-visible{transform:translateY(-4px);box-shadow:0 16px 32px -12px rgba(0,0,0,.75),0 0 0 1px rgba(201,164,106,.25)}
+.ig-tile:focus-visible img{transform:scale(1.04);filter:brightness(1.06)}
+.ig-tile:focus-visible::after{opacity:1;box-shadow:inset 0 0 0 1px rgba(201,164,106,.6)}
 .js .ig-tile{opacity:0;transform:translateY(12px);transition:opacity .7s ease,transform .7s ease,box-shadow .4s ease}
 .js .ig-tile.in{opacity:1;transform:none}
-.js .ig-tile.in:hover,.js .ig-tile.in:focus-visible{transform:translateY(-4px)}
+.js .ig-tile.in:focus-visible{transform:translateY(-4px)}
 @media(max-width:760px){
   .ig-tile{width:clamp(148px,42vw,200px)}
   .ig-scroller{scroll-padding-left:var(--pad)}
@@ -280,4 +282,48 @@ section:has(+ .strip),
 .strip{margin-block:var(--sec-y)}
 @media(max-width:760px){
   :root{--sec-y:clamp(3.25rem,12vw,5rem)}
+}
+
+/* batch 9 */
+/* 13: dark UI chrome */
+:root{color-scheme:dark}
+/* 9: hover lift / zoom only on real hover devices (no sticky hover on touch) */
+@media(hover:hover){
+ .g:hover{box-shadow:0 18px 40px -14px rgba(0,0,0,.8),0 0 0 1px rgba(201,164,106,.2)}
+ .g:hover::after{opacity:1;box-shadow:inset 0 0 0 1px rgba(201,164,106,.6)}
+ .card:hover{border-color:rgba(201,164,106,.6);box-shadow:0 18px 36px -12px rgba(0,0,0,.7),0 0 24px -8px rgba(201,164,106,.25)}
+ .card:hover::after{opacity:1}.card:hover h3{color:#f0d39c}
+ .ig-tile:hover{box-shadow:0 16px 32px -12px rgba(0,0,0,.75),0 0 0 1px rgba(201,164,106,.25)}
+ .ig-tile:hover::after{opacity:1;box-shadow:inset 0 0 0 1px rgba(201,164,106,.6)}
+}
+@media(hover:hover) and (prefers-reduced-motion:no-preference){
+ .js .g.ld:hover img,.g:hover img{transform:scale(1.035);filter:brightness(1.06)}
+ .card:hover{transform:translateY(-6px)}
+ .card:hover img{transform:scale(1.04);filter:brightness(1.06)}
+ .ig-tile:hover,.js .ig-tile.in:hover{transform:translateY(-4px)}
+ .ig-tile:hover img{transform:scale(1.04);filter:brightness(1.06)}
+}
+@media(hover:none){.btn:hover{transform:none}.btn:hover::after{transform:skewX(-20deg) translateX(0)}}
+/* 7: IG skeleton tiles (4:5) shown while /api/instagram loads */
+.ig-tile.sk{pointer-events:none;background:#1a1816;opacity:1!important;transform:none!important;box-shadow:none}
+.ig-tile.sk::before{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 20%,rgba(201,164,106,.07) 45%,rgba(244,241,234,.06) 50%,rgba(201,164,106,.07) 55%,transparent 80%);background-size:250% 100%;animation:igsk 1.6s ease-in-out infinite}
+@keyframes igsk{from{background-position:120% 0}to{background-position:-120% 0}}
+@media(prefers-reduced-motion:reduce){.ig-tile.sk::before{animation:none}}
+/* 8: shows filter clear + empty state */
+.filter .qw{position:relative;flex:1 1 260px;max-width:440px;min-width:0;display:flex}
+.filter .qw input{flex:1;max-width:none;padding-right:2.9rem}
+.filter input::-webkit-search-cancel-button{-webkit-appearance:none;appearance:none}
+#qx{position:absolute;right:.35rem;top:50%;transform:translateY(-50%);width:2.4rem;height:2.4rem;border:0;border-radius:50%;background:transparent;color:var(--mut);font-size:1.5rem;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:color .2s,background .2s}
+#qx:hover,#qx:focus-visible{color:var(--acc);background:rgba(201,164,106,.1)}
+.none{text-align:center;padding:2.5rem 1rem 1.5rem;font-size:1.05rem}
+.none .orn{padding:0 0 1.1rem;max-width:360px}
+/* 12: skip rendering off-screen gallery work */
+#western,#about{content-visibility:auto;contain-intrinsic-size:auto 900px}
+@media(max-width:760px){.grid .g{content-visibility:auto;contain-intrinsic-size:auto calc((100vw - 2.5rem) / var(--ar,1.5))}}
+/* 10: Contact thumb zone (phones) */
+@media(max-width:760px){
+ #contact .contact-lines{gap:.35rem;margin:1.4rem 0 1.9rem}
+ #contact .contact-lines a{display:inline-flex;align-items:center;min-height:48px;vertical-align:middle;padding:.5rem 0}
+ #contact .actions{gap:.9rem;margin-bottom:.5rem}
+ #contact .actions .btn{min-height:54px;display:flex;align-items:center;justify-content:center;padding:.9rem 1.25rem}
 }

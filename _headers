@@ -1,5 +1,6 @@
 # Every local asset is referenced with ?v=<content hash> (tools/build.py), so a changed file
-# always has a new URL -> safe to cache for a year. HTML keeps Pages' default (max-age=0, must-revalidate).
+# always has a new URL -> safe to cache for a year. HTML is short-cached (revalidate every load) so phones
+# pick up a deploy immediately; unchanged pages still come back as cheap 304s via ETag.
 /img/*
   Cache-Control: public, max-age=31536000, immutable
 /fonts/*
@@ -16,6 +17,16 @@
   Cache-Control: public, max-age=3600
 /data/*
   Cache-Control: public, max-age=300
+/
+  Cache-Control: no-cache
+/index.html
+  Cache-Control: no-cache
+/shows
+  Cache-Control: no-cache
+/shows.html
+  Cache-Control: no-cache
+/404.html
+  Cache-Control: no-cache
 /*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin

@@ -25,10 +25,14 @@ var at=0;function ac(){at=0;var cur=null,mid=innerHeight*.4;SE.forEach(function(
 /* shows filter + live list from /api/shows (ShootProof via Pages Function); static cards stay as no-JS/offline fallback */
 var Q=d.getElementById('q');if(Q){var CS,CC=d.querySelector('.cards'),NO=d.querySelector('.none'),QC=d.getElementById('qc');
 function fl(){var v=Q.value.trim().toLowerCase(),c=0;CS.forEach(function(el){var m=!v||el.textContent.toLowerCase().indexOf(v)>-1;el.hidden=!m;if(m)c++});CC.classList.toggle('f',!!v);NO.hidden=c>0;QC.textContent=v?c+' of '+CS.length+' shows':CS.length+' shows'}
-function grab(){CS=[].slice.call(CC.querySelectorAll('.card'))}grab();Q.addEventListener('input',fl);fl();
+function grab(){CS=[].slice.call(CC.querySelectorAll('.card'))}grab();
+ var QX=d.getElementById('qx');function qx(){if(QX)QX.hidden=!Q.value}
+ Q.addEventListener('input',function(){fl();qx()});if(QX)QX.addEventListener('click',function(){Q.value='';fl();qx();Q.focus()});
+ Q.addEventListener('keydown',function(e){if(e.key==='Escape'&&Q.value){Q.value='';fl();qx()}});fl();qx();
+function th(u){return '/api/thumb?u='+encodeURIComponent(u)}
 function key(a){return a.map(function(x){return x.name+'\n'+x.url}).join('\n')}
 function card(x,i){var a=d.createElement('a'),p=d.createElement('picture'),im=d.createElement('img'),dv=d.createElement('div'),h=d.createElement('h3'),sp=d.createElement('span');
- a.className='card';a.href=x.url;a.target='_blank';a.rel='noopener';im.src=x.cover;im.alt='Cover photo: '+x.name;im.width=x.w;im.height=x.h;
+ a.className='card';a.href=x.url;a.target='_blank';a.rel='noopener';im.src=th(x.cover);im.alt='Cover photo: '+x.name;im.width=x.w;im.height=x.h;
  if(i===0)im.setAttribute('fetchpriority','high');if(i>3)im.loading='lazy';im.decoding='async';h.textContent=x.name;sp.textContent='View & order photos \u2197';
  p.appendChild(im);dv.appendChild(h);dv.appendChild(sp);a.appendChild(p);a.appendChild(dv);return a}
 if(window.fetch&&CC)fetch('/api/shows').then(function(r){return r.ok?r.json():null}).then(function(j){
@@ -38,10 +42,12 @@ if(window.fetch&&CC)fetch('/api/shows').then(function(r){return r.ok?r.json():nu
  CS.forEach(function(el){el.remove()});CC.appendChild(f);grab();fl()}).catch(function(){})}
 /* Instagram live row from /api/instagram (Pages Function scrapes public profile; hide section on failure) */
 var IG=d.getElementById('instagram'),IR=d.getElementById('ig-row');
+if(IG&&IR&&window.fetch){for(var s=0;s<7;s++){var sk=d.createElement('span');sk.className='ig-tile sk';sk.setAttribute('aria-hidden','true');IR.appendChild(sk)}IG.hidden=false;IG.setAttribute('aria-busy','true')}
+function igOff(){IR.querySelectorAll('.sk').forEach(function(e){e.remove()});IG.removeAttribute('aria-busy');if(!IR.children.length)IG.hidden=true}
 if(IG&&IR&&window.fetch)fetch('/api/instagram').then(function(r){return r.ok?r.json():null}).then(function(j){
- if(!j||!Array.isArray(j.posts))return;
+ if(!j||!Array.isArray(j.posts)){igOff();return}
  var L=j.posts.filter(function(x){return x&&typeof x.code==='string'&&/^https:\/\/www\.instagram\.com\/(p|reel)\/[A-Za-z0-9_-]+\//.test(x.url)&&/^https:\/\/[^"'<>\s]+/.test(x.thumb)&&(x.thumb.indexOf('cdninstagram.com')>-1||x.thumb.indexOf('fbcdn.net')>-1)}).slice(0,9);
- if(!L.length)return;
+ if(!L.length){igOff();return}
  var f=d.createDocumentFragment();
  L.forEach(function(x,i){
   var a=d.createElement('a'),im=d.createElement('img');
@@ -52,11 +58,11 @@ if(IG&&IR&&window.fetch)fetch('/api/instagram').then(function(r){return r.ok?r.j
   if(im.complete&&im.naturalWidth)a.classList.add('ld');
   a.appendChild(im);f.appendChild(a);
  });
- IR.appendChild(f);IG.hidden=false;IG.querySelectorAll('.rv').forEach(function(el){el.classList.add('in')});
+ IR.querySelectorAll('.sk').forEach(function(e){e.remove()});IR.appendChild(f);IG.hidden=false;IG.removeAttribute('aria-busy');IG.querySelectorAll('.rv').forEach(function(el){el.classList.add('in')});
  var tiles=[].slice.call(IR.querySelectorAll('.ig-tile'));
  if('IntersectionObserver' in window&&!rm){var io2=new IntersectionObserver(function(es){var n=0;es.forEach(function(e){if(e.isIntersecting){e.target.style.transitionDelay=Math.min(n++,6)*70+'ms';e.target.classList.add('in');io2.unobserve(e.target)}})},{rootMargin:'0px 0px -6% 0px'});tiles.forEach(function(el){io2.observe(el)})}
  else tiles.forEach(function(el){el.classList.add('in')});
-}).catch(function(){});
+}).catch(function(){if(IG&&IR)igOff()});
 /* lightbox */
 var L=d.getElementById('lb');if(!L)return;
 var I=L.querySelector('img'),C=d.getElementById('lbc'),X=d.getElementById('x'),P=d.getElementById('p'),N=d.getElementById('n'),A=[],k=0,last=null;
