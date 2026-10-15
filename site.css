@@ -66,6 +66,7 @@ footer{padding:2.5rem var(--pad);text-align:center;color:var(--mut);font-size:.9
 @media(max-width:760px){
  :root{--pad:1.25rem}
  header{flex-direction:column;justify-content:center;padding:.8rem .5rem .3rem;gap:.15rem}
+ .brand{align-self:flex-start;margin-left:.75rem}
  .brand img{height:50px}header.shrink .brand img{height:38px}header.shrink{padding:.4rem .5rem .1rem}
  nav{justify-content:center;flex-wrap:nowrap;width:100%}
  nav a{margin:0 .45rem;font-size:.66rem;letter-spacing:.08em;padding:.45rem 0}
