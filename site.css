@@ -84,3 +84,8 @@ ul.ph{padding-left:2.2rem}ul.ph li.tagph{margin-left:-1rem}
 .grid.two{grid-template-columns:repeat(2,1fr)}
 @media(max-width:479px){.grid.two{grid-template-columns:1fr}.hero p.tag{font-size:.95rem;letter-spacing:.14em}}
 #contact{min-height:calc(100vh - var(--hh) - 90px)}
+body{animation:pgin .8s ease-out both}@keyframes pgin{from{opacity:0}to{opacity:1}}
+.hero{background-position:center calc(50% + var(--py,0px))}
+.card{transition:border-color .25s,transform .3s ease,box-shadow .3s ease}
+.card:hover,.card:focus-visible{transform:translateY(-6px);box-shadow:0 14px 30px rgba(0,0,0,.55)}
+@media(prefers-reduced-motion:reduce){body{animation:none}.hero{background-position:center}.card:hover,.card:focus-visible{transform:none}}
