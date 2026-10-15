@@ -122,3 +122,37 @@ h2{font-weight:500;letter-spacing:.03em}
 @media(max-width:760px){.grid .g,.grid.two .g{flex:1 1 100%}.grid{gap:22px}.strip{height:clamp(200px,58vw,320px)}}
 @media(prefers-reduced-motion:reduce){.hs i{transition:none;animation:none!important}.strip::before{transform:none}.hs{transform:none}#lb.on img{animation:none}#lb img{transition:none}}
 .hero{background-position:center!important;min-height:88svh}.hs,.strip::before{will-change:transform;backface-visibility:hidden}@media(max-width:760px){.hero{min-height:78svh}}
+/* v3: soft image load */
+.js .g img{opacity:0;filter:blur(14px);transform:scale(1.04);transition:opacity .9s ease,filter 1.1s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
+.js .g.ld img{opacity:1;filter:none;transform:none}
+.js .g.ld:hover img,.js .g.ld:focus-visible img{transform:scale(1.035);filter:brightness(1.06)}
+/* v3: hero quote */
+.hero p.quote{font-family:"Cormorant Garamond",Georgia,serif;font-style:italic;font-size:clamp(1.15rem,2.2vw,1.5rem);line-height:1.4;color:var(--fg);opacity:.88;max-width:30rem;margin:-1rem 0 1.8rem;padding-left:1rem;border-left:1px solid rgba(201,164,106,.6)}
+.js .hero .in>*{animation:hin 1.1s cubic-bezier(.2,.7,.2,1) both}.js .hero .in>:nth-child(2){animation-delay:.15s}.js .hero .in>:nth-child(3){animation-delay:.3s}.js .hero .in>:nth-child(4){animation-delay:.45s}.js .hero .in>:nth-child(5){animation-delay:.6s}
+@keyframes hin{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+/* v3: active nav */
+nav a.act{color:var(--acc);border-bottom-color:rgba(201,164,106,.5)}
+/* v3: back to top */
+.totop{position:fixed;right:clamp(14px,3vw,28px);bottom:clamp(14px,3vw,28px);z-index:20;width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--acc);background:rgba(17,17,17,.82);border:1px solid rgba(201,164,106,.45);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);opacity:0;visibility:hidden;transform:translateY(10px);transition:opacity .35s,transform .35s,visibility .35s,background .2s}
+.totop.on{opacity:1;visibility:visible;transform:none}.totop:hover{background:rgba(201,164,106,.16)}
+/* v3: focus */
+:focus-visible{outline:2px solid var(--acc);outline-offset:4px;border-radius:3px;box-shadow:0 0 0 6px rgba(201,164,106,.18)}
+.g:focus-visible,.card:focus-visible{outline-offset:3px}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* v3: shows filter */
+.filter{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem 1rem;margin:1.5rem 0 .5rem}
+.filter input{flex:1 1 260px;max-width:440px;min-width:0;font:inherit;font-size:1rem;color:var(--fg);background:#1a1a1a;border:1px solid var(--line);border-radius:4px;padding:.75rem 1rem;transition:border-color .2s}
+.filter input:focus{border-color:var(--acc);outline:none;box-shadow:0 0 0 4px rgba(201,164,106,.18)}
+.filter input::placeholder{color:#8d877c}
+#qc{font-size:.9rem;color:var(--mut)}.none{grid-column:1/-1;color:var(--mut)}
+.card img{transition:transform .7s cubic-bezier(.2,.7,.2,1),filter .4s}.card{position:relative}
+.card:hover img,.card:focus-visible img{transform:scale(1.04);filter:brightness(1.06)}
+.card:first-of-type::before{content:"Newest";position:absolute;top:.75rem;left:.75rem;z-index:2;background:var(--acc);color:#111;font-size:.7rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding:.25rem .6rem;border-radius:2px}
+.cards.f .card:first-of-type::before{display:none}
+.card picture{display:block;overflow:hidden}
+/* v3: 404 */
+.nf{min-height:72svh;display:flex;align-items:center;text-align:center;background:radial-gradient(ellipse at 50% 30%,rgba(201,164,106,.08),transparent 60%)}
+.nf .wrap{max-width:640px}.nf-k{font-family:"Cormorant Garamond",Georgia,serif;font-size:clamp(5rem,16vw,9rem);line-height:1;color:var(--acc);opacity:.35;margin:0 0 .6rem}
+.nf h1{font-size:clamp(2rem,5vw,3rem);font-weight:500}.nf .orn{margin:1.2rem auto 1.5rem}.nf-t{color:var(--mut)}
+@media(prefers-reduced-motion:reduce){.js .g img{transition:none;filter:none;transform:none;opacity:1}.js .hero .in>*{animation:none}.totop{transition:none}.card:hover img{transform:none}}
+[hidden]{display:none!important}
