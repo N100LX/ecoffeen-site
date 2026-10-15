@@ -19,7 +19,7 @@ nav a{white-space:nowrap;color:var(--fg);text-decoration:none;font-size:.82rem;l
 nav a:hover,nav a[aria-current]{color:var(--acc);border-bottom-color:rgba(201,164,106,.5)}
 nav .cta{color:var(--acc);font-weight:600}
 /* hero */
-.hero{min-height:88vh;display:flex;align-items:flex-end;padding:0 var(--pad);background:#111 url(img/equine-1.jpg) center/cover;background-image:linear-gradient(to top,rgba(0,0,0,.88),rgba(0,0,0,.1) 62%),image-set(url(img/equine-1-2000.webp) type("image/webp"),url(img/equine-1.jpg) type("image/jpeg"))}
+.hero{min-height:88vh;display:flex;align-items:flex-end;padding:0 var(--pad);background:#111 url(/img/equine-1.jpg) center/cover;background-image:linear-gradient(to top,rgba(0,0,0,.88),rgba(0,0,0,.1) 62%),image-set(url(/img/equine-1-2000.webp) type("image/webp"),url(/img/equine-1.jpg) type("image/jpeg"))}
 .hero .in{padding:3rem 0 4.5rem;max-width:900px}
 .hero h1{margin:0 0 1rem}.hlogo{width:min(440px,72vw);height:auto;display:block}
 .hero p.tag{font-size:1.2rem;letter-spacing:.2em;text-transform:uppercase;color:var(--mut);margin:0 0 1.8rem}
@@ -112,7 +112,7 @@ h2{font-weight:500;letter-spacing:.03em}
 .orn::after{transform:scaleX(-1)}.orn span{font-size:.7rem;letter-spacing:.3em;transform:rotate(45deg);display:block;width:7px;height:7px;border:1px solid currentColor}
 /* v2: strip */
 .strip{position:relative;overflow:hidden;height:clamp(220px,46vw,560px);background:#111;border-top:1px solid rgba(201,164,106,.25);border-bottom:1px solid rgba(201,164,106,.25);box-shadow:inset 0 30px 40px -20px #111,inset 0 -30px 40px -20px #181818}
-.strip::before{content:"";position:absolute;inset:-18% 0;z-index:-1;background:url(img/equine-23-2000.webp) center/cover;transform:translate3d(0,var(--sy,0px),0)}.strip{isolation:isolate}
+.strip::before{content:"";position:absolute;inset:-18% 0;z-index:-1;background:url(/img/equine-23-2000.webp) center/cover;transform:translate3d(0,var(--sy,0px),0)}.strip{isolation:isolate}
 /* v2: lightbox */
 #lb img{transition:opacity .3s ease,transform .3s ease}
 #lb.on img{animation:zi .4s cubic-bezier(.2,.7,.2,1)}
@@ -206,6 +206,6 @@ header.shrink{background:rgba(13,13,13,.97);box-shadow:0 8px 24px -12px rgba(0,0
 .contact-lines{line-height:1.9}
 @media(prefers-reduced-motion:reduce){.hsd{display:none}.btn::after{display:none}.btn,.g,.card::after,header,.brand img{transition:none}}
 .hero h1{position:relative;width:min(440px,72vw)}
-.hero h1::after{content:"";position:absolute;inset:0;pointer-events:none;-webkit-mask:url(img/logo-light.png) center/100% 100% no-repeat;mask:url(img/logo-light.png) center/100% 100% no-repeat;background:linear-gradient(105deg,transparent 35%,rgba(232,196,120,.0) 40%,rgba(240,205,130,.85) 50%,rgba(232,196,120,0) 60%,transparent 65%) no-repeat;background-size:250% 100%;background-position:150% 0;animation:lshim 7s ease-in-out 1.6s infinite}
+.hero h1::after{content:"";position:absolute;inset:0;pointer-events:none;-webkit-mask:url(/img/logo-light.png) center/100% 100% no-repeat;mask:url(/img/logo-light.png) center/100% 100% no-repeat;background:linear-gradient(105deg,transparent 35%,rgba(232,196,120,.0) 40%,rgba(240,205,130,.85) 50%,rgba(232,196,120,0) 60%,transparent 65%) no-repeat;background-size:250% 100%;background-position:150% 0;animation:lshim 7s ease-in-out 1.6s infinite}
 @keyframes lshim{0%{background-position:150% 0}45%,100%{background-position:-50% 0}}
 @media(prefers-reduced-motion:reduce){.hero h1::after{animation:none;display:none}}
