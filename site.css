@@ -233,6 +233,8 @@ header.shrink{background:rgba(13,13,13,.97);box-shadow:0 8px 24px -12px rgba(0,0
 #instagram .ig-head h2::after{margin-top:.7rem}
 #instagram .ig-more{font-size:.9rem;letter-spacing:.08em;text-decoration:none;color:var(--mut);border-bottom:1px solid transparent;transition:color .2s,border-color .2s}
 #instagram .ig-more:hover,#instagram .ig-more:focus-visible{color:var(--acc);border-bottom-color:rgba(201,164,106,.45)}
+/* Full gold divider (diamond + gradient lines via .orn ::before/::after); hide only when IG section is hidden */
+.orn-after-ig{padding-top:clamp(.75rem,2vw,1.25rem);padding-bottom:clamp(.75rem,2vw,1.25rem)}
 .ig-scroller{margin-top:1.6rem;margin-left:calc(var(--pad) * -1);margin-right:calc(var(--pad) * -1);padding-left:var(--pad);padding-right:var(--pad);overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:#3a342b transparent;overscroll-behavior-x:contain}
 .ig-scroller::-webkit-scrollbar{height:8px}
 .ig-scroller::-webkit-scrollbar-thumb{background:#3a342b;border-radius:4px}
