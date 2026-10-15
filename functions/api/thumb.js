@@ -3,6 +3,7 @@
 // Only proxies the ShootProof CloudFront host (no open proxy). Covers are content-addressed
 // per upload, so they're cached long at the edge and in the browser.
 const IMG_OK = 'https://d2rxqglyhdohqf.cloudfront.net/';
+const TYPES = { jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png', webp: 'image/webp', gif: 'image/gif', avif: 'image/avif' };
 const EDGE_TTL = 2592000;   // 30 days at the edge
 const BROWSER_TTL = 604800; // 7 days in the browser
 
@@ -22,8 +23,10 @@ export async function onRequestGet(ctx) {
   } catch (e) {
     return Response.redirect(u, 302);
   }
-  const ct = r.headers.get('Content-Type') || '';
-  if (!r.ok || !ct.startsWith('image/')) return Response.redirect(u, 302);
+  // ShootProof's S3 serves covers as application/octet-stream, so type them from the extension.
+  let ct = r.headers.get('Content-Type') || '';
+  if (!ct.startsWith('image/')) ct = TYPES[(u.split('?')[0].match(/\.(\w+)$/) || [])[1]?.toLowerCase()] || '';
+  if (!r.ok || !ct) return Response.redirect(u, 302);
   const res = new Response(r.body, { status: 200, headers: {
     'Content-Type': ct,
     'Cache-Control': `public, max-age=${BROWSER_TTL}, s-maxage=${EDGE_TTL}, immutable`,
