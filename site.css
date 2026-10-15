@@ -89,3 +89,4 @@ body{animation:pgin .8s ease-out both}@keyframes pgin{from{opacity:0}to{opacity:
 .card{transition:border-color .25s,transform .3s ease,box-shadow .3s ease}
 .card:hover,.card:focus-visible{transform:translateY(-6px);box-shadow:0 14px 30px rgba(0,0,0,.55)}
 @media(prefers-reduced-motion:reduce){body{animation:none}.hero{background-position:center}.card:hover,.card:focus-visible{transform:none}}
+.nowrap{white-space:nowrap}@media(max-width:760px){.contact-lines .nowrap{font-size:clamp(.72rem,3.9vw,1rem)}}
