@@ -11,6 +11,8 @@
 /img/og-share.jpg
   ! Cache-Control
   Cache-Control: public, max-age=3600
+/og-image.jpg
+  Cache-Control: public, max-age=3600
 /favicon.ico
   Cache-Control: public, max-age=3600
 /site.webmanifest

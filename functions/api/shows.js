@@ -15,7 +15,7 @@ async function load() {
   const out = [];
   for (let page = 1, pages = 1; page <= pages && page <= 20; page++) {
     const r = await fetch(`${API}?page=${page}&rows=100`, {
-      headers: { Accept: 'application/vnd.shootproof+json', 'User-Agent': 'ecoffeen.pages.dev shows' },
+      headers: { Accept: 'application/vnd.shootproof+json', 'User-Agent': 'ecoffeenphotography.com shows' },
       cf: { cacheTtl: 0 },
     });
     if (!r.ok) throw new Error('ShootProof HTTP ' + r.status);
