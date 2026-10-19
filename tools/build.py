@@ -18,6 +18,7 @@ import hashlib, html, json, os, re, subprocess, sys, urllib.parse, urllib.reques
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(ROOT)
 PAGES = ['index.html', 'shows.html', '404.html']
+SITE = 'https://ecoffeenphotography.com'
 _h = {}
 def ver(path):
     p = path.split('?')[0].lstrip('/')
@@ -60,9 +61,21 @@ def refresh_shows():
     cards = []
     for i, (n, u, c, w, h) in enumerate(shows):
         att = ' fetchpriority="high"' if i == 0 else (' loading="lazy"' if i > 3 else '')
-        cards.append('<a class="card" href="%s" target="_blank" rel="noopener"><picture><img src="/api/thumb?u=%s" alt="Cover photo: %s" width="%d" height="%d"%s decoding="async"></picture><div><h3>%s</h3><span>View &amp; order photos &#8599;</span></div></a>' % (e(u), e(urllib.parse.quote(c, safe='')), e(n), w, h, att, e(n)))
+        cards.append('<a class="card" href="%s" target="_blank" rel="noopener"><picture><img src="/api/thumb?u=%s" alt="Gallery cover for %s" width="%d" height="%d"%s decoding="async"></picture><div><h3>%s</h3><span>View &amp; order photos &#8599;</span></div></a>' % (e(u), e(urllib.parse.quote(c, safe='')), e(n), w, h, att, e(n)))
     h = open('shows.html').read()
     h2 = re.sub(r'(<div class="cards"><p class="none" hidden>.*?</p>).*?(</div>\n<p style="margin-top:2rem")', lambda m: m.group(1) + '\n'.join(cards) + m.group(2), h, count=1, flags=re.S)
+    ld = {'@context': 'https://schema.org', '@graph': [
+        {'@type': 'CollectionPage', '@id': SITE + '/shows#webpage', 'url': SITE + '/shows', 'name': 'Horse Show Photos | Emily Coffeen Photography',
+         'isPartOf': {'@id': SITE + '/#website'}, 'about': {'@id': SITE + '/#org'}, 'breadcrumb': {'@id': SITE + '/shows#breadcrumb'},
+         'mainEntity': {'@id': SITE + '/shows#galleries'}, 'inLanguage': 'en-US'},
+        {'@type': 'BreadcrumbList', '@id': SITE + '/shows#breadcrumb', 'itemListElement': [
+            {'@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': SITE + '/'},
+            {'@type': 'ListItem', 'position': 2, 'name': 'Show Photos', 'item': SITE + '/shows'}]},
+        {'@type': 'ItemList', '@id': SITE + '/shows#galleries', 'name': 'Horse show photo galleries', 'itemListOrder': 'https://schema.org/ItemListOrderDescending',
+         'numberOfItems': len(shows), 'itemListElement': [{'@type': 'ListItem', 'position': i + 1, 'name': n, 'url': u} for i, (n, u, c, w, hh) in enumerate(shows)]}]}
+    tag = '<script type="application/ld+json" id="ld-shows">' + json.dumps(ld, ensure_ascii=False, separators=(',', ':')).replace('</', '<\\/') + '</script>'
+    if 'id="ld-shows"' in h2: h2 = re.sub(r'<script type="application/ld\+json" id="ld-shows">.*?</script>', lambda m: tag, h2, count=1, flags=re.S)
+    else: h2 = h2.replace('</head>', tag + '</head>', 1)
     if h2 == h and len(shows): print('shows: unchanged')
     open('shows.html', 'w').write(h2); print('shows:', len(shows), 'cards')
 

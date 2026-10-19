@@ -327,3 +327,6 @@ section:has(+ .strip),
  #contact .actions{gap:.9rem;margin-bottom:.5rem}
  #contact .actions .btn{min-height:54px;display:flex;align-items:center;justify-content:center;padding:.9rem 1.25rem}
 }
+
+/* footer internal links */
+.fnav{margin:0 0 .7rem;line-height:2}.fnav a{color:var(--mut);text-decoration:none;padding:.3rem .15rem;transition:color .2s}.fnav a:hover,.fnav a:focus-visible{color:var(--acc)}

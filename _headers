@@ -32,3 +32,7 @@
 /*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
+
+# keep the pages.dev mirror out of search results (canonical is the apex domain)
+https://:project.pages.dev/*
+  X-Robots-Tag: noindex

@@ -32,7 +32,7 @@ function grab(){CS=[].slice.call(CC.querySelectorAll('.card'))}grab();
 function th(u){return '/api/thumb?u='+encodeURIComponent(u)}
 function key(a){return a.map(function(x){return x.name+'\n'+x.url}).join('\n')}
 function card(x,i){var a=d.createElement('a'),p=d.createElement('picture'),im=d.createElement('img'),dv=d.createElement('div'),h=d.createElement('h3'),sp=d.createElement('span');
- a.className='card';a.href=x.url;a.target='_blank';a.rel='noopener';im.src=th(x.cover);im.alt='Cover photo: '+x.name;im.width=x.w;im.height=x.h;
+ a.className='card';a.href=x.url;a.target='_blank';a.rel='noopener';im.src=th(x.cover);im.alt='Gallery cover for '+x.name;im.width=x.w;im.height=x.h;
  if(i===0)im.setAttribute('fetchpriority','high');if(i>3)im.loading='lazy';im.decoding='async';h.textContent=x.name;sp.textContent='View & order photos \u2197';
  p.appendChild(im);dv.appendChild(h);dv.appendChild(sp);a.appendChild(p);a.appendChild(dv);return a}
 if(window.fetch&&CC)fetch('/api/shows').then(function(r){return r.ok?r.json():null}).then(function(j){
