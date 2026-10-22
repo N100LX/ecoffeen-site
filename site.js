@@ -46,7 +46,8 @@ if(IG&&IR&&window.fetch){for(var s=0;s<7;s++){var sk=d.createElement('span');sk.
 function igOff(){IR.querySelectorAll('.sk').forEach(function(e){e.remove()});IG.removeAttribute('aria-busy');if(!IR.children.length)IG.hidden=true}
 if(IG&&IR&&window.fetch)fetch('/api/instagram').then(function(r){return r.ok?r.json():null}).then(function(j){
  if(!j||!Array.isArray(j.posts)){igOff();return}
- var L=j.posts.filter(function(x){return x&&typeof x.code==='string'&&/^https:\/\/www\.instagram\.com\/(p|reel)\/[A-Za-z0-9_-]+\//.test(x.url)&&/^https:\/\/[^"'<>\s]+/.test(x.thumb)&&(x.thumb.indexOf('cdninstagram.com')>-1||x.thumb.indexOf('fbcdn.net')>-1)}).slice(0,9);
+ /* thumbs are same-origin only: self-hosted /assets/ig/<code>.jpg or the cached /api/igthumb proxy (never expiring IG CDN links) */
+ var L=j.posts.filter(function(x){return x&&typeof x.code==='string'&&/^https:\/\/www\.instagram\.com\/(p|reel)\/[A-Za-z0-9_-]+\//.test(x.url)&&typeof x.thumb==='string'&&/^\/(assets\/ig\/[A-Za-z0-9_-]+\.jpg(\?v=\w+)?|api\/igthumb\?[^"'<>\s]+)$/.test(x.thumb)}).slice(0,9);
  if(!L.length){igOff();return}
  var f=d.createDocumentFragment();
  L.forEach(function(x,i){
@@ -54,7 +55,9 @@ if(IG&&IR&&window.fetch)fetch('/api/instagram').then(function(r){return r.ok?r.j
   a.className='ig-tile';a.href=x.url;a.target='_blank';a.rel='noopener';a.setAttribute('aria-label','Instagram post');
   im.src=x.thumb;im.alt='';im.width=320;im.height=320;im.decoding='async';
   if(i>2)im.loading='lazy';
-  im.addEventListener('load',function(){a.classList.add('ld')});im.addEventListener('error',function(){a.classList.add('ld')});
+  im.addEventListener('load',function(){a.classList.add('ld')});
+  /* a thumb that fails to load is dropped (no blank/broken tiles); if none are left, hide the whole section */
+  im.addEventListener('error',function(){a.remove();if(!IR.querySelector('.ig-tile'))igOff()});
   if(im.complete&&im.naturalWidth)a.classList.add('ld');
   a.appendChild(im);f.appendChild(a);
  });

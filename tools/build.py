@@ -10,8 +10,9 @@
 - shows.html cards                -> refreshed from the public ShootProof API (all galleries, newest first),
   as the no-JS / instant fallback. The live list comes from functions/api/shows.js at runtime; if the API
   is unreachable at build time the existing cards are kept. Skip with --no-shows.
-- data/instagram.json           -> refreshed from the public Instagram profile (fallback for
-  functions/api/instagram.js when live scrape is rate-limited). Skip with --no-instagram.
+- data/instagram.json + assets/ig/*.jpg -> refreshed by tools/refresh_instagram.py (thumbnails are downloaded
+  once and self-hosted, because Instagram's CDN links expire). Same script runs daily on its own; see its
+  docstring and docs/INSTAGRAM-OFFICIAL.md. Skip with --no-instagram.
 Edit site.css / site.js / *.html normally, then rerun this. Needs node (npx terser).
 """
 import hashlib, html, json, os, re, subprocess, sys, urllib.parse, urllib.request
@@ -79,51 +80,10 @@ def refresh_shows():
     if h2 == h and len(shows): print('shows: unchanged')
     open('shows.html', 'w').write(h2); print('shows:', len(shows), 'cards')
 
-IG_PROFILE = 'https://www.instagram.com/emily_coffeen_photography/'
 def refresh_instagram():
-    """Snapshot public grid posts into data/instagram.json for /api/instagram fallback."""
-    try:
-        req = urllib.request.Request(IG_PROFILE, headers={
-            'User-Agent': 'Mozilla/5.0 (compatible; ecoffeen-build)',
-            'Accept': 'text/html', 'Accept-Language': 'en-US,en;q=0.9',
-        })
-        html = urllib.request.urlopen(req, timeout=25).read().decode('utf-8', 'replace')
-    except Exception as e:
-        print('instagram: scrape unavailable, keeping existing fallback (%s)' % e); return
-    best = []
-    for block in re.findall(r'<script[^>]*type="application/json"[^>]*data-sjs[^>]*>(.*?)</script>', html, re.S):
-        try: data = json.loads(block)
-        except Exception: continue
-        stack = [data]
-        while stack:
-            o = stack.pop()
-            if isinstance(o, dict):
-                u = o.get('xig_user_by_username')
-                if isinstance(u, dict):
-                    edges = (u.get('polaris_ordered_timeline_connection') or {}).get('edges') or []
-                    if len(edges) > len(best):
-                        out = []
-                        for e in edges:
-                            n = (e or {}).get('node') or {}
-                            code, thumb = n.get('code'), n.get('display_uri')
-                            if not isinstance(code, str) or not re.match(r'^[A-Za-z0-9_-]{5,20}$', code): continue
-                            if not isinstance(thumb, str) or not thumb.startswith('https://') or not ('cdninstagram.com' in thumb or 'fbcdn.net' in thumb): continue
-                            if re.search(r'["\'<>\s]', thumb): continue
-                            video = n.get('media_type') == 2 or n.get('product_type') == 'clips' or n.get('__typename') == 'XIGPolarisVideoMedia'
-                            path = 'reel' if video else 'p'
-                            out.append({'code': code, 'url': 'https://www.instagram.com/%s/%s/' % (path, code), 'thumb': thumb, 'video': bool(video)})
-                        if len(out) > len(best): best = out
-                stack.extend(o.values())
-            elif isinstance(o, list):
-                stack.extend(o)
-    posts = best[:9]
-    if len(posts) < 1:
-        print('instagram: no posts parsed, keeping existing'); return
-    from datetime import datetime, timezone
-    body = {'count': len(posts), 'updated': datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'), 'handle': 'emily_coffeen_photography', 'posts': posts}
-    os.makedirs('data', exist_ok=True)
-    open('data/instagram.json', 'w').write(json.dumps(body, indent=2) + '\n')
-    print('instagram:', len(posts), 'posts -> data/instagram.json')
+    """Self-hosted Instagram row snapshot (never wipes existing data if Instagram blocks the fetch)."""
+    r = subprocess.run([sys.executable, 'tools/refresh_instagram.py'], capture_output=True, text=True)
+    print('instagram:', (r.stdout.strip() or r.stderr.strip()).splitlines()[-1:] or ['?'])
 
 if '--no-shows' not in sys.argv: refresh_shows()
 if '--no-instagram' not in sys.argv: refresh_instagram()

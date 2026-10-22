@@ -7,6 +7,9 @@
   Cache-Control: public, max-age=31536000, immutable
 /site.min.js
   Cache-Control: public, max-age=31536000, immutable
+# self-hosted Instagram thumbnails (tools/refresh_instagram.py); data/instagram.json links them with ?v=<hash>
+/assets/ig/*
+  Cache-Control: public, max-age=31536000, immutable
 # fetched by crawlers / OS without a ?v
 /img/og-share.jpg
   ! Cache-Control

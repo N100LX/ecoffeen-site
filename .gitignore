@@ -1,2 +1,5 @@
 shots/
 shots/
+__pycache__/
+.wrangler/
+node_modules/

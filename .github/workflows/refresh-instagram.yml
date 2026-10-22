@@ -1,0 +1,39 @@
+# Daily refresh of the home-page Instagram row (data/instagram.json + self-hosted assets/ig/*.jpg).
+# Commits and pushes to main only when posts changed; Cloudflare Pages then auto-deploys.
+# If Instagram blocks the runner, the job logs a warning and keeps the existing data (no failure e-mails).
+# When the repo secret IG_ACCESS_TOKEN exists, the official Instagram API is used instead of the public
+# profile page (see docs/INSTAGRAM-OFFICIAL.md); optional GH_SECRETS_PAT lets it save the refreshed token.
+name: Refresh Instagram row
+on:
+  schedule:
+    - cron: '23 12 * * *'   # daily, ~7:23 AM Central (12:23 UTC)
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: refresh-instagram
+  cancel-in-progress: false
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install --quiet pillow
+      - name: Refresh (commit + push only on change)
+        env:
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_SECRETS_PAT }}
+        run: |
+          git config user.name "ecoffeen-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          set +e
+          out=$(python3 tools/refresh_instagram.py --commit 2>&1); rc=$?
+          set -e
+          echo "$out"
+          echo "### Instagram refresh" >> "$GITHUB_STEP_SUMMARY"; echo "$out" | tail -1 >> "$GITHUB_STEP_SUMMARY"
+          if [ $rc -eq 2 ]; then echo "::warning::Instagram blocked this run; existing row kept."; exit 0; fi
+          exit $rc

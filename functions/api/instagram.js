@@ -4,7 +4,11 @@
 // embedded Relay payload (polaris_ordered_timeline_connection in data-sjs).
 // Same edge-cache pattern as /api/shows. Instagram often rate-limits / blocks
 // datacenter IPs (HTTP 429); on scrape failure we serve data/instagram.json
-// (refreshed at build time) so the home-page row still appears.
+// (refreshed by tools/refresh_instagram.py) so the home-page row still appears.
+// Thumbnails are never hotlinked: Instagram's CDN URLs are signed and expire (oe=...), so
+//  - fallback posts point at self-hosted /assets/ig/<code>.jpg (downloaded once by the refresh script);
+//  - live posts reuse that file when we already have it, otherwise go through /api/igthumb, which
+//    fetches the image once and keeps it in the Cloudflare edge cache (keyed by post code).
 const HANDLE = 'emily_coffeen_photography';
 const PROFILE = 'https://www.instagram.com/' + HANDLE + '/';
 const FRESH = 600;    // 10 min: serve cached without re-hitting Instagram
@@ -58,16 +62,30 @@ function thumbOk(u) {
   } catch (e) { return false; }
 }
 
+// Self-hosted thumbnail written by tools/refresh_instagram.py
+function localOk(u, code) {
+  return typeof u === 'string' && u.startsWith('/assets/ig/' + code + '.jpg')
+    && /^\/assets\/ig\/[A-Za-z0-9_-]{5,20}\.jpg(\?v=[A-Za-z0-9]{1,16})?$/.test(u);
+}
+
+// Signed CDN URL -> our own cached proxy (the host allowlist is still enforced here and in /api/igthumb).
+function proxied(code, u) {
+  return '/api/igthumb?c=' + encodeURIComponent(code) + '&u=' + encodeURIComponent(u);
+}
+
 function sanitize(posts) {
   const out = [];
   for (const p of posts || []) {
     if (!p || typeof p.code !== 'string' || !/^[A-Za-z0-9_-]{5,20}$/.test(p.code)) continue;
-    if (!thumbOk(p.thumb)) continue;
+    let thumb;
+    if (localOk(p.thumb, p.code)) thumb = p.thumb;
+    else if (thumbOk(p.thumb)) thumb = proxied(p.code, p.thumb);
+    else continue;
     let url = p.url;
     if (typeof url !== 'string' || !/^https:\/\/www\.instagram\.com\/(p|reel)\/[A-Za-z0-9_-]+\//.test(url)) {
       url = 'https://www.instagram.com/' + (p.video ? 'reel' : 'p') + '/' + p.code + '/';
     }
-    out.push({ code: p.code, url, thumb: p.thumb, video: !!p.video });
+    out.push({ code: p.code, url, thumb, video: !!p.video });
     if (out.length >= LIMIT) break;
   }
   return out;
@@ -133,11 +151,15 @@ async function scrape() {
   return parsePosts(html);
 }
 
-async function loadFallback(request) {
+async function fallbackJson(request) {
   const url = new URL('/data/instagram.json', request.url);
   const r = await fetch(url.toString(), { cf: { cacheTtl: 60 } });
   if (!r.ok) throw new Error('fallback HTTP ' + r.status);
-  const j = await r.json();
+  return r.json();
+}
+
+async function loadFallback(request) {
+  const j = await fallbackJson(request);
   const posts = sanitize(j && j.posts);
   if (!posts.length) throw new Error('fallback empty');
   return { posts, updated: (j && j.updated) || new Date().toISOString(), source: 'fallback' };
@@ -145,7 +167,15 @@ async function loadFallback(request) {
 
 async function load(request) {
   try {
-    const posts = await scrape();
+    const scraped = await scrape();
+    // Prefer our self-hosted copy of each thumbnail; anything new goes through /api/igthumb.
+    const local = {};
+    try {
+      const j = await fallbackJson(request);
+      for (const p of (j && j.posts) || []) if (p && localOk(p.thumb, p.code)) local[p.code] = p.thumb;
+    } catch (e) {}
+    const posts = sanitize(scraped.map((p) => ({ ...p, thumb: local[p.code] || p.thumb })));
+    if (!posts.length) throw new Error('Instagram: no usable posts');
     return { posts, updated: new Date().toISOString(), source: 'live' };
   } catch (e) {
     console.log('instagram scrape failed', String(e && e.message || e));
