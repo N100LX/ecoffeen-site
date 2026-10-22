@@ -1,4 +1,4 @@
-# Daily refresh of the home-page Instagram row (data/instagram.json + self-hosted assets/ig/*.jpg).
+# Scheduled refresh of the home-page Instagram row (data/instagram.json + self-hosted assets/ig/*.jpg).
 # Commits and pushes to main only when posts changed; Cloudflare Pages then auto-deploys.
 # If Instagram blocks the runner, the job logs a warning and keeps the existing data (no failure e-mails).
 # When the repo secret IG_ACCESS_TOKEN exists, the official Instagram API is used instead of the public
@@ -6,7 +6,9 @@
 name: Refresh Instagram row
 on:
   schedule:
-    - cron: '23 12 * * *'   # daily, ~7:23 AM Central (12:23 UTC)
+    # Every 6 hours (00:23/06:23/12:23/18:23 UTC). Each run gets a fresh runner/IP; Instagram answers some
+    # GitHub runners and rate-limits others (429), so several quiet attempts a day keep the row current.
+    - cron: '23 */6 * * *'
   workflow_dispatch:
 permissions:
   contents: write
@@ -18,8 +20,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
       - run: pip install --quiet pillow
