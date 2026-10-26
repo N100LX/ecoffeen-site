@@ -330,3 +330,11 @@ section:has(+ .strip),
 
 /* footer internal links */
 .fnav{margin:0 0 .7rem;line-height:2}.fnav a{color:var(--mut);text-decoration:none;padding:.3rem .15rem;transition:color .2s}.fnav a:hover,.fnav a:focus-visible{color:var(--acc)}
+
+/* shows page: World Finals note (centered card above the show list) */
+.wf{max-width:40rem;margin:0 auto 2.2rem;padding:clamp(1.4rem,5vw,2rem) clamp(1.15rem,5vw,2.25rem);text-align:center;background:var(--bg2);border:1px solid rgba(201,164,106,.35);border-radius:4px}
+.wf h2{font-size:clamp(1.75rem,6vw,2.2rem);margin:0 0 1rem}
+.wf h2::after{margin:.7rem auto 0}
+.wf p{margin:0 0 .85rem;font-size:clamp(1.05rem,4.2vw,1.15rem);line-height:1.6;color:var(--fg)}
+.wf p:last-child{margin-bottom:0}
+.wf a{font-weight:600;white-space:nowrap}
